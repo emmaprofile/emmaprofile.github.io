@@ -1,0 +1,223 @@
+
+import os
+
+output_dir = "/mnt/agents/output/water-scott-martin"
+
+# ========== MOBILE-OPTIMIZED cards.html ==========
+cards_html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#0f4c81">
+    <title>Cards — Water Scott Martin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand"><i class="fas fa-water"></i><span>Water Scott Martin</span></div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                <a href="transfers.html" class="nav-item"><i class="fas fa-paper-plane"></i><span>Transfers</span></a>
+                <a href="cards.html" class="nav-item active"><i class="fas fa-credit-card"></i><span>Cards</span></a>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Loans & lending features are in development.', 'info')"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></button>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Investment accounts are launching Q3.', 'info')"><i class="fas fa-chart-pie"></i><span>Investments</span></button>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-mini"><div class="user-avatar">AM</div><div class="user-info"><div class="user-name">Alexander Martin</div><div class="user-role">Premium Member</div></div></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                <div class="topbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search..."></div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" onclick="showToast('No new notifications', 'All caught up!', 'info')" aria-label="Notifications"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                    <button class="icon-btn" aria-label="Security"><i class="fas fa-shield-alt"></i></button>
+                    <div class="user-mini" style="cursor:pointer;" onclick="window.location.href='settings.html'"><div class="user-avatar" style="width:32px;height:32px;font-size:12px;">AM</div></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="page-header">
+                    <h1>Your Cards</h1>
+                    <p>Manage your physical and virtual cards, set limits, and control spending.</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="col-6">
+                        <div class="physical-card">
+                            <div class="card-logo"><i class="fas fa-water"></i></div>
+                            <div class="card-chip"></div>
+                            <div class="card-number-display">•••• •••• •••• 8842</div>
+                            <div class="card-bottom">
+                                <div class="card-holder-name">ALEXANDER MARTIN</div>
+                                <div class="card-expiry">09/28</div>
+                            </div>
+                        </div>
+                        <div class="card-controls" style="margin-top:16px;">
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Card Status</h4>
+                                    <p id="statusText">Active and ready to use</p>
+                                </div>
+                                <div class="toggle active" id="cardToggle" onclick="toggleCard(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Online Purchases</h4>
+                                    <p>Enabled for e-commerce</p>
+                                </div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>ATM Withdrawals</h4>
+                                    <p>Enabled globally</p>
+                                </div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Contactless Payments</h4>
+                                    <p>Tap to pay enabled</p>
+                                </div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="widget">
+                            <div class="widget-header">
+                                <span class="widget-title">Spending Limits</span>
+                                <button class="btn-text" onclick="showToast('Limits Updated', 'Your new spending limits are now active.', 'success')">Save Changes</button>
+                            </div>
+                            <div style="display:flex;flex-direction:column;gap:20px;">
+                                <div>
+                                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+                                        <span>Daily Limit</span>
+                                        <strong>$5,000</strong>
+                                    </div>
+                                    <input type="range" min="500" max="25000" value="5000" style="width:100%;accent-color:var(--accent);" oninput="this.previousElementSibling.querySelector('strong').textContent='$'+parseInt(this.value).toLocaleString()">
+                                </div>
+                                <div>
+                                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+                                        <span>Monthly Limit</span>
+                                        <strong>$20,000</strong>
+                                    </div>
+                                    <input type="range" min="1000" max="100000" value="20000" style="width:100%;accent-color:var(--accent);" oninput="this.previousElementSibling.querySelector('strong').textContent='$'+parseInt(this.value).toLocaleString()">
+                                </div>
+                                <div>
+                                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+                                        <span>Single Transaction</span>
+                                        <strong>$10,000</strong>
+                                    </div>
+                                    <input type="range" min="100" max="50000" value="10000" style="width:100%;accent-color:var(--accent);" oninput="this.previousElementSibling.querySelector('strong').textContent='$'+parseInt(this.value).toLocaleString()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget" style="margin-top:24px;">
+                            <div class="widget-header">
+                                <span class="widget-title">Virtual Cards</span>
+                                <button class="btn-text" onclick="createVirtualCard()"><i class="fas fa-plus"></i> New</button>
+                            </div>
+                            <div id="virtualCards">
+                                <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;margin-bottom:8px;">
+                                    <div style="width:40px;height:40px;background:var(--accent-light);color:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shopping-bag"></i></div>
+                                    <div style="flex:1;min-width:0;">
+                                        <div style="font-size:14px;font-weight:600;">Amazon Shopping</div>
+                                        <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">•••• 7741 • Expires 07/26 • $500 limit</div>
+                                    </div>
+                                    <div class="toggle active" style="width:36px;height:20px;" onclick="toggleSwitch(this)"></div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;">
+                                    <div style="width:40px;height:40px;background:#ede9fe;color:#7c3aed;border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-plane"></i></div>
+                                    <div style="flex:1;min-width:0;">
+                                        <div style="font-size:14px;font-weight:600;">Travel Card</div>
+                                        <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">•••• 8852 • Expires 08/26 • $2,000 limit</div>
+                                    </div>
+                                    <div class="toggle active" style="width:36px;height:20px;" onclick="toggleSwitch(this)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+            toast.innerHTML = `<div class="toast-icon"><i class="fas fa-${icon}"></i></div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-msg">${message}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'slideOut 0.3s ease forwards'; setTimeout(() => toast.remove(), 300); }, 4000);
+        }
+
+        function toggleCard(el) {
+            el.classList.toggle('active');
+            const isActive = el.classList.contains('active');
+            document.getElementById('statusText').textContent = isActive ? 'Active and ready to use' : 'Card is frozen. No transactions allowed.';
+            showToast(isActive ? 'Card Activated' : 'Card Frozen', isActive ? 'Your debit card is now active.' : 'Your debit card has been frozen for security.', isActive ? 'success' : 'info');
+        }
+
+        function toggleSwitch(el) {
+            el.classList.toggle('active');
+        }
+
+        function createVirtualCard() {
+            const container = document.getElementById('virtualCards');
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;margin-bottom:8px;animation:slideIn 0.3s ease;';
+            div.innerHTML = `
+                <div style="width:40px;height:40px;background:#dbeafe;color:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt"></i></div>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:14px;font-weight:600;">Secure Online Card</div>
+                    <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">•••• ${Math.floor(1000+Math.random()*9000)} • Expires 12/26 • $1,000 limit</div>
+                </div>
+                <div class="toggle active" style="width:36px;height:20px;" onclick="toggleSwitch(this)"></div>
+            `;
+            container.insertBefore(div, container.firstChild);
+            showToast('Virtual Card Created', 'New virtual card generated instantly.', 'success');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+        
+        // Close sidebar on nav click (mobile)
+        document.querySelectorAll('.sidebar-nav a, .sidebar-nav button').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) toggleSidebar();
+            });
+        });
+    </script>
+</body>
+</html>'''
+
+with open(os.path.join(output_dir, "cards.html"), "w", encoding="utf-8") as f:
+    f.write(cards_html)
+
+print(f"Updated cards.html: {len(cards_html):,} chars")
+Updated cards.html: 14,256 chars

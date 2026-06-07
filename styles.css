@@ -1,0 +1,363 @@
+
+import os
+
+output_dir = "/mnt/agents/output/water-scott-martin"
+
+# ========== MOBILE-OPTIMIZED index.html ==========
+index_html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#0f4c81">
+    <title>Water Scott Martin — Modern Banking</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-water"></i>
+                <span>Water Scott Martin</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#personal">Personal</a></li>
+                <li><a href="#business">Business</a></li>
+                <li><a href="#wealth">Wealth</a></li>
+                <li><a href="#about">About</a></li>
+                <li class="mobile-only"><a href="login.html" class="btn btn-outline btn-full">Log In</a></li>
+                <li class="mobile-only"><a href="signup.html" class="btn btn-primary btn-full">Open Account</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn btn-outline">Log In</a>
+                <a href="signup.html" class="btn btn-primary">Open Account</a>
+            </div>
+            <button class="mobile-menu-toggle" id="menuToggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <i class="fas fa-bars" id="menuIcon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i> FDIC Insured • $500M Capital
+                </div>
+                <h1>Banking Built for<br>Your Ambition</h1>
+                <p class="hero-subtitle">Water Scott Martin combines the security of a $500M capital foundation with the speed and intelligence of modern technology. No hidden fees, no compromises.</p>
+                <div class="hero-cta">
+                    <a href="signup.html" class="btn btn-primary btn-large">Get Started — It's Free</a>
+                    <a href="#features" class="btn btn-ghost btn-large"><i class="fas fa-play-circle"></i> See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">5.25%</div>
+                        <div class="stat-label">High-Yield Savings APY</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">0%</div>
+                        <div class="stat-label">Monthly Fees</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">&lt; 50ms</div>
+                        <div class="stat-label">Transaction Speed</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="card-mockup">
+                    <div class="card-chip"></div>
+                    <div class="card-logo"><i class="fas fa-water"></i></div>
+                    <div class="card-number">•••• •••• •••• 8842</div>
+                    <div class="card-holder">ALEXANDER MARTIN</div>
+                    <div class="card-expiry">09/28</div>
+                    <div class="card-waves"></div>
+                </div>
+                <div class="floating-element float-1">
+                    <i class="fas fa-check-circle"></i> Transfer Complete
+                </div>
+                <div class="floating-element float-2">
+                    <i class="fas fa-lock"></i> 256-bit Encrypted
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="trust-bar">
+        <div class="container">
+            <p>Backed by institutional-grade security</p>
+            <div class="trust-logos">
+                <div class="trust-item"><i class="fas fa-university"></i> OCC Regulated</div>
+                <div class="trust-item"><i class="fas fa-shield-alt"></i> FDIC Insured</div>
+                <div class="trust-item"><i class="fas fa-certificate"></i> SOC 2 Type II</div>
+                <div class="trust-item"><i class="fas fa-credit-card"></i> PCI DSS Level 1</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why WSM</span>
+                <h2>Everything You Need. Nothing You Don't.</h2>
+                <p>From everyday checking to complex wealth management, all in one beautifully designed platform.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon blue"><i class="fas fa-bolt"></i></div>
+                    <h3>Instant Everything</h3>
+                    <p>Open an account in 3 minutes. Get your virtual card instantly. Send money via FedNow in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon green"><i class="fas fa-piggy-bank"></i></div>
+                    <h3>5.25% APY Savings</h3>
+                    <p>Your money should work as hard as you do. Earn 10x the national average on your savings.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon purple"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Military-Grade Security</h3>
+                    <p>FIDO2 biometric authentication, real-time fraud detection, and $250,000 FDIC insurance on every account.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon orange"><i class="fas fa-chart-line"></i></div>
+                    <h3>Wealth Built In</h3>
+                    <p>Robo-advisor, self-directed trading, retirement accounts, and human advisors — starting at $0.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon red"><i class="fas fa-building"></i></div>
+                    <h3>Business Banking</h3>
+                    <p>Multi-user access, API integrations, treasury management, and SBA lending for businesses of every size.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon teal"><i class="fas fa-globe"></i></div>
+                    <h3>Global Reach</h3>
+                    <p>Send money to 150+ countries with transparent FX rates. Multi-currency accounts coming soon.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Showcase -->
+    <section class="products">
+        <div class="container">
+            <div class="product-showcase">
+                <div class="product-image">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="app-header">
+                                <span>Good morning, Alex</span>
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="app-balance">
+                                <div class="balance-label">Total Balance</div>
+                                <div class="balance-amount">$47,284.50</div>
+                                <div class="balance-change positive">+ $1,240.30 this month</div>
+                            </div>
+                            <div class="app-actions">
+                                <div class="app-action"><i class="fas fa-paper-plane"></i>Send</div>
+                                <div class="app-action"><i class="fas fa-qrcode"></i>Scan</div>
+                                <div class="app-action"><i class="fas fa-plus"></i>Add</div>
+                            </div>
+                            <div class="app-transactions">
+                                <div class="tx-item">
+                                    <div class="tx-icon"><i class="fas fa-coffee"></i></div>
+                                    <div class="tx-info">
+                                        <div class="tx-name">Blue Bottle Coffee</div>
+                                        <div class="tx-time">Today, 8:42 AM</div>
+                                    </div>
+                                    <div class="tx-amount">-$6.50</div>
+                                </div>
+                                <div class="tx-item">
+                                    <div class="tx-icon deposit"><i class="fas fa-arrow-down"></i></div>
+                                    <div class="tx-info">
+                                        <div class="tx-name">Direct Deposit</div>
+                                        <div class="tx-time">Yesterday</div>
+                                    </div>
+                                    <div class="tx-amount positive">+$3,850.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <span class="section-tag">Mobile First</span>
+                    <h2>Your Bank in Your Pocket</h2>
+                    <p>Manage your entire financial life from one app. Check balances, transfer funds, deposit checks, lock cards, and invest — all with Face ID or fingerprint security.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Mobile check deposit with same-day availability</li>
+                        <li><i class="fas fa-check"></i> Instant peer-to-peer payments with Zelle</li>
+                        <li><i class="fas fa-check"></i> Virtual cards for secure online shopping</li>
+                        <li><i class="fas fa-check"></i> Real-time spending notifications</li>
+                        <li><i class="fas fa-check"></i> Automated savings rules and round-ups</li>
+                    </ul>
+                    <div class="app-download">
+                        <a href="#" class="app-store-btn"><i class="fab fa-apple"></i> App Store</a>
+                        <a href="#" class="app-store-btn"><i class="fab fa-google-play"></i> Google Play</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Trusted</span>
+                <h2>What Our Customers Say</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"I switched from a traditional bank and never looked back. The 5.25% APY alone saved me thousands, and the app is actually enjoyable to use."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Mitchell</div>
+                            <div class="author-title">Product Designer, San Francisco</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"As a small business owner, WSM's business banking suite is a game changer. The API integration with my accounting software saves me 10 hours a month."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JC</div>
+                        <div class="author-info">
+                            <div class="author-name">James Chen</div>
+                            <div class="author-title">Founder, TechStart Inc.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"The security features give me peace of mind. When someone tried to use my card fraudulently, WSM blocked it instantly and notified me within seconds."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RP</div>
+                        <div class="author-info">
+                            <div class="author-name">Robert Park</div>
+                            <div class="author-title">Attorney, New York</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Ready to Experience Better Banking?</h2>
+                <p>Join over 100,000 customers who have already made the switch. Open your account in under 3 minutes — no credit check, no hidden fees, no minimum balance.</p>
+                <a href="signup.html" class="btn btn-primary btn-large">Open Your Free Account</a>
+                <div class="cta-trust">
+                    <span><i class="fas fa-lock"></i> 256-bit SSL Encryption</span>
+                    <span><i class="fas fa-shield-alt"></i> FDIC Insured</span>
+                    <span><i class="fas fa-user-check"></i> No Credit Check</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-water"></i>
+                        <span>Water Scott Martin</span>
+                    </div>
+                    <p>Modern banking with institutional-grade security. FDIC Insured. Equal Housing Lender.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Personal</h4>
+                    <ul>
+                        <li><a href="#">Checking</a></li>
+                        <li><a href="#">Savings</a></li>
+                        <li><a href="#">Credit Cards</a></li>
+                        <li><a href="#">Personal Loans</a></li>
+                        <li><a href="#">Mortgages</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Business</h4>
+                    <ul>
+                        <li><a href="#">Business Checking</a></li>
+                        <li><a href="#">Business Savings</a></li>
+                        <li><a href="#">Business Loans</a></li>
+                        <li><a href="#">Merchant Services</a></li>
+                        <li><a href="#">API Banking</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Water Scott Martin Bank. All rights reserved. NMLS ID: 0123456.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Disclosures</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navLinks');
+            const icon = document.getElementById('menuIcon');
+            nav.classList.toggle('active');
+            icon.className = nav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+                document.getElementById('menuIcon').className = 'fas fa-bars';
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>'''
+
+with open(os.path.join(output_dir, "index.html"), "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+print(f"Updated index.html: {len(index_html):,} chars")
+Updated index.html: 18,440 chars

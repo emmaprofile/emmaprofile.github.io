@@ -1,0 +1,336 @@
+
+import os
+
+output_dir = "/mnt/agents/output/water-scott-martin"
+
+# ========== MOBILE-OPTIMIZED settings.html ==========
+settings_html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#0f4c81">
+    <title>Settings — Water Scott Martin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand"><i class="fas fa-water"></i><span>Water Scott Martin</span></div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                <a href="transfers.html" class="nav-item"><i class="fas fa-paper-plane"></i><span>Transfers</span></a>
+                <a href="cards.html" class="nav-item"><i class="fas fa-credit-card"></i><span>Cards</span></a>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Loans & lending features are in development.', 'info')"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></button>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Investment accounts are launching Q3.', 'info')"><i class="fas fa-chart-pie"></i><span>Investments</span></button>
+                <a href="settings.html" class="nav-item active"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-mini"><div class="user-avatar">AM</div><div class="user-info"><div class="user-name">Alexander Martin</div><div class="user-role">Premium Member</div></div></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                <div class="topbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search..."></div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" onclick="showToast('No new notifications', 'All caught up!', 'info')" aria-label="Notifications"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                    <button class="icon-btn" aria-label="Security"><i class="fas fa-shield-alt"></i></button>
+                    <div class="user-mini" style="cursor:pointer;"><div class="user-avatar" style="width:32px;height:32px;font-size:12px;">AM</div></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="page-header">
+                    <h1>Settings</h1>
+                    <p>Manage your profile, security preferences, and account preferences.</p>
+                </div>
+
+                <div class="settings-nav">
+                    <button class="settings-tab active" onclick="setTab(this, 'profile')">Profile</button>
+                    <button class="settings-tab" onclick="setTab(this, 'security')">Security</button>
+                    <button class="settings-tab" onclick="setTab(this, 'notifications')">Notifications</button>
+                    <button class="settings-tab" onclick="setTab(this, 'accounts')">Linked Accounts</button>
+                </div>
+
+                <!-- Profile Panel -->
+                <div class="settings-panel active" id="profile">
+                    <div class="widget" style="max-width:600px;">
+                        <div class="widget-header"><span class="widget-title">Personal Information</span></div>
+                        <div class="avatar-upload">
+                            <div class="avatar-large">AM</div>
+                            <div>
+                                <button class="btn-secondary" onclick="showToast('Upload', 'Profile photo updated.', 'success')">Change Photo</button>
+                                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">JPG, PNG. Max 2MB.</div>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group"><label>First Name</label><input type="text" value="Alexander"></div>
+                            <div class="form-group"><label>Last Name</label><input type="text" value="Martin"></div>
+                            <div class="form-group full"><label>Email</label><input type="email" value="alex.martin@email.com"></div>
+                            <div class="form-group full"><label>Phone</label><input type="tel" value="(415) 555-0192"></div>
+                            <div class="form-group full"><label>Address</label><input type="text" value="1234 Market Street, Suite 500"></div>
+                            <div class="form-group"><label>City</label><input type="text" value="San Francisco"></div>
+                            <div class="form-group"><label>ZIP</label><input type="text" value="94102"></div>
+                        </div>
+                        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+                            <button class="btn btn-primary" onclick="showToast('Saved', 'Profile information updated successfully.', 'success')">Save Changes</button>
+                            <button class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Panel -->
+                <div class="settings-panel" id="security">
+                    <div class="dashboard-grid">
+                        <div class="col-6">
+                            <div class="widget">
+                                <div class="widget-header"><span class="widget-title">Two-Factor Authentication</span><span style="font-size:12px;color:var(--success);font-weight:600;"><i class="fas fa-check-circle"></i> Enabled</span></div>
+                                <div style="display:flex;flex-direction:column;gap:16px;">
+                                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;">
+                                        <i class="fas fa-mobile-alt" style="font-size:20px;color:var(--accent);"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:14px;font-weight:600;">Authenticator App</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">Google Authenticator configured</div>
+                                        </div>
+                                        <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;">
+                                        <i class="fas fa-comment-alt" style="font-size:20px;color:var(--accent);"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:14px;font-weight:600;">SMS Codes</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">Ending in 0192</div>
+                                        </div>
+                                        <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--app-bg);border-radius:8px;">
+                                        <i class="fas fa-fingerprint" style="font-size:20px;color:var(--accent);"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:14px;font-weight:600;">Biometric Login</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">Face ID & Touch ID</div>
+                                        </div>
+                                        <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="widget">
+                                <div class="widget-header"><span class="widget-title">Login History</span></div>
+                                <div style="display:flex;flex-direction:column;gap:12px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-color);gap:12px;">
+                                        <div style="min-width:0;">
+                                            <div style="font-size:14px;font-weight:600;">Chrome on MacOS</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">San Francisco, CA • Current session</div>
+                                        </div>
+                                        <span style="font-size:12px;color:var(--success);font-weight:600;flex-shrink:0;">Active</span>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-color);gap:12px;">
+                                        <div style="min-width:0;">
+                                            <div style="font-size:14px;font-weight:600;">iPhone 15 Pro</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">San Francisco, CA • 2 hours ago</div>
+                                        </div>
+                                        <button class="btn-text" style="font-size:12px;flex-shrink:0;" onclick="showToast('Session Ended', 'iPhone session revoked.', 'info')">Revoke</button>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;gap:12px;">
+                                        <div style="min-width:0;">
+                                            <div style="font-size:14px;font-weight:600;">Safari on iPad</div>
+                                            <div style="font-size:12px;color:var(--text-secondary);">San Francisco, CA • Yesterday</div>
+                                        </div>
+                                        <button class="btn-text" style="font-size:12px;flex-shrink:0;" onclick="showToast('Session Ended', 'iPad session revoked.', 'info')">Revoke</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget" style="margin-top:24px;">
+                                <div class="widget-header"><span class="widget-title">Password</span></div>
+                                <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">Last changed 90 days ago. We recommend updating every 90 days.</p>
+                                <button class="btn btn-primary" onclick="showToast('Email Sent', 'Password reset link sent to your email.', 'success')">Change Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Panel -->
+                <div class="settings-panel" id="notifications">
+                    <div class="widget" style="max-width:600px;">
+                        <div class="widget-header"><span class="widget-title">Notification Preferences</span></div>
+                        <div style="display:flex;flex-direction:column;gap:16px;">
+                            <div class="control-item">
+                                <div class="control-info"><h4>Push Notifications</h4><p>Real-time alerts on your device</p></div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info"><h4>Email Notifications</h4><p>Weekly summaries and alerts</p></div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info"><h4>SMS Alerts</h4><p>Transaction confirmations and security</p></div>
+                                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info"><h4>Marketing</h4><p>Product updates and offers</p></div>
+                                <div class="toggle" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Linked Accounts Panel -->
+                <div class="settings-panel" id="accounts">
+                    <div class="widget" style="max-width:600px;">
+                        <div class="widget-header"><span class="widget-title">External Accounts</span><button class="btn-text" onclick="showToast('Link Account', 'Plaid connection initiated.', 'info')"><i class="fas fa-plus"></i> Link</button></div>
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--app-bg);border-radius:8px;">
+                                <div style="width:40px;height:40px;background:#00447c;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex-shrink:0;">Ch</div>
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-size:14px;font-weight:600;">Chase Checking</div>
+                                    <div style="font-size:12px;color:var(--text-secondary);">•••• 4521 • Last synced 2h ago</div>
+                                </div>
+                                <span style="font-size:12px;color:var(--success);font-weight:600;flex-shrink:0;">Active</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--app-bg);border-radius:8px;">
+                                <div style="width:40px;height:40px;background:#1a1a1e;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex-shrink:0;">WF</div>
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-size:14px;font-weight:600;">Wells Fargo Savings</div>
+                                    <div style="font-size:12px;color:var(--text-secondary);">•••• 8892 • Last synced 1d ago</div>
+                                </div>
+                                <span style="font-size:12px;color:var(--success);font-weight:600;flex-shrink:0;">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+            toast.innerHTML = `<div class="toast-icon"><i class="fas fa-${icon}"></i></div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-msg">${message}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'slideOut 0.3s ease forwards'; setTimeout(() => toast.remove(), 300); }, 4000);
+        }
+
+        function setTab(el, panelId) {
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById(panelId).classList.add('active');
+        }
+
+        function toggleSwitch(el) {
+            el.classList.toggle('active');
+            const isActive = el.classList.contains('active');
+            showToast('Preference Updated', isActive ? 'Feature enabled.' : 'Feature disabled.', 'success');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+        
+        // Close sidebar on nav click (mobile)
+        document.querySelectorAll('.sidebar-nav a, .sidebar-nav button').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) toggleSidebar();
+            });
+        });
+    </script>
+</body>
+</html>'''
+
+with open(os.path.join(output_dir, "settings.html"), "w", encoding="utf-8") as f:
+    f.write(settings_html)
+
+# Now update dashboard.css to add the sidebar-overlay style
+dashboard_css_path = os.path.join(output_dir, "dashboard.css")
+with open(dashboard_css_path, "r", encoding="utf-8") as f:
+    dashboard_css = f.read()
+
+# Add sidebar-overlay styles before the mobile responsive section
+overlay_css = '''/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+    display: none;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active { display: block; }
+
+'''
+
+# Insert before @media queries
+import re
+dashboard_css = re.sub(r'(/\* ==+\n   MOBILE RESPONSIVE)', overlay_css + r'\1', dashboard_css)
+
+with open(dashboard_css_path, "w", encoding="utf-8") as f:
+    f.write(dashboard_css)
+
+# Also add mobile-only class to styles.css
+styles_css_path = os.path.join(output_dir, "styles.css")
+with open(styles_css_path, "r", encoding="utf-8") as f:
+    styles_css = f.read()
+
+# Add mobile-only utility
+mobile_only = '''/* Mobile-only elements */
+.mobile-only { display: none; }
+
+'''
+
+styles_css = re.sub(r'(/\* ==+\n   MOBILE RESPONSIVE)', mobile_only + r'\1', styles_css)
+
+# Add mobile-only display in mobile media query
+styles_css = styles_css.replace(
+    '''@media (max-width: 768px) {''',
+    '''@media (max-width: 768px) {
+    .mobile-only { display: block; }'''
+)
+
+with open(styles_css_path, "w", encoding="utf-8") as f:
+    f.write(styles_css)
+
+# Verify all files
+files = sorted(os.listdir(output_dir))
+print("All files updated successfully!")
+print(f"\n{'='*50}")
+print(f"{'File':<25} {'Size':>10}")
+print(f"{'='*50}")
+for f in files:
+    size = os.path.getsize(os.path.join(output_dir, f))
+    print(f"{f:<25} {size:>10,} bytes")
+print(f"{'='*50}")
+All files updated successfully!
+
+==================================================
+File                            Size
+==================================================
+cards.html                    14,318 bytes
+dashboard.css                 26,155 bytes
+dashboard.html                24,330 bytes
+index.html                    18,477 bytes
+login.html                     2,674 bytes
+settings.html                 18,449 bytes
+signup.html                    3,473 bytes
+styles.css                    23,930 bytes
+transfers.html                15,109 bytes
+==================================================

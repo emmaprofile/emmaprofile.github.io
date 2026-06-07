@@ -1,0 +1,34 @@
+
+import os
+
+output_dir = "/mnt/agents/output/water-scott-martin"
+
+# Read existing files
+with open(os.path.join(output_dir, "styles.css"), "r", encoding="utf-8") as f:
+    styles = f.read()
+
+with open(os.path.join(output_dir, "dashboard.css"), "r", encoding="utf-8") as f:
+    dashboard_styles = f.read()
+
+with open(os.path.join(output_dir, "index.html"), "r", encoding="utf-8") as f:
+    index = f.read()
+
+with open(os.path.join(output_dir, "dashboard.html"), "r", encoding="utf-8") as f:
+    dashboard = f.read()
+
+with open(os.path.join(output_dir, "transfers.html"), "r", encoding="utf-8") as f:
+    transfers = f.read()
+
+with open(os.path.join(output_dir, "cards.html"), "r", encoding="utf-8") as f:
+    cards = f.read()
+
+with open(os.path.join(output_dir, "settings.html"), "r", encoding="utf-8") as f:
+    settings = f.read()
+
+print("All files loaded successfully")
+print(f"styles.css: {len(styles)} chars")
+print(f"dashboard.css: {len(dashboard_styles)} chars")
+print(f"index.html: {len(index)} chars")All files loaded successfully
+styles.css: 20262 chars
+dashboard.css: 18434 chars
+index.html: 17278 chars

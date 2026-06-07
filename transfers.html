@@ -1,0 +1,236 @@
+
+import os
+
+output_dir = "/mnt/agents/output/water-scott-martin"
+
+# ========== MOBILE-OPTIMIZED transfers.html ==========
+transfers_html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#0f4c81">
+    <title>Transfers — Water Scott Martin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand"><i class="fas fa-water"></i><span>Water Scott Martin</span></div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                <a href="transfers.html" class="nav-item active"><i class="fas fa-paper-plane"></i><span>Transfers</span></a>
+                <a href="cards.html" class="nav-item"><i class="fas fa-credit-card"></i><span>Cards</span></a>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Loans & lending features are in development.', 'info')"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></button>
+                <button class="nav-item" onclick="showToast('Coming soon', 'Investment accounts are launching Q3.', 'info')"><i class="fas fa-chart-pie"></i><span>Investments</span></button>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-mini"><div class="user-avatar">AM</div><div class="user-info"><div class="user-name">Alexander Martin</div><div class="user-role">Premium Member</div></div></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                <div class="topbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search..."></div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" onclick="showToast('No new notifications', 'All caught up!', 'info')" aria-label="Notifications"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                    <button class="icon-btn" aria-label="Security"><i class="fas fa-shield-alt"></i></button>
+                    <div class="user-mini" style="cursor:pointer;" onclick="window.location.href='settings.html'"><div class="user-avatar" style="width:32px;height:32px;font-size:12px;">AM</div></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="page-header">
+                    <h1>Transfer Money</h1>
+                    <p>Send money instantly between your accounts, to others, or around the world.</p>
+                </div>
+
+                <div class="transfer-options">
+                    <button class="transfer-option active" onclick="setTransferType(this, 'internal')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Between Accounts</h3>
+                        <p>Instant, free, 24/7</p>
+                    </button>
+                    <button class="transfer-option" onclick="setTransferType(this, 'zelle')">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Zelle</h3>
+                        <p>Send to friends & family</p>
+                    </button>
+                    <button class="transfer-option" onclick="setTransferType(this, 'wire')">
+                        <i class="fas fa-globe"></i>
+                        <h3>Wire Transfer</h3>
+                        <p>Domestic & international</p>
+                    </button>
+                </div>
+
+                <div class="transfer-form" id="transferForm">
+                    <div class="form-section">
+                        <h3>Transfer Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>From Account</label>
+                                <select id="fromAccount">
+                                    <option value="checking">Premium Checking •••• 8842 ($24,850.00)</option>
+                                    <option value="savings">High-Yield Savings •••• 9921 ($18,420.50)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>To Account</label>
+                                <select id="toAccount">
+                                    <option value="savings">High-Yield Savings •••• 9921 ($18,420.50)</option>
+                                    <option value="checking">Premium Checking •••• 8842 ($24,850.00)</option>
+                                </select>
+                            </div>
+                            <div class="form-group full">
+                                <label>Amount</label>
+                                <div class="amount-input"><span>$</span><input type="number" id="txAmount" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+                            </div>
+                            <div class="form-group full">
+                                <label>Memo (Optional)</label>
+                                <input type="text" placeholder="What's this for?">
+                            </div>
+                            <div class="form-group full">
+                                <label>When</label>
+                                <select><option>Send now</option><option>Schedule for later</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                        <div style="font-size:13px;color:var(--text-secondary);">
+                            <i class="fas fa-shield-alt"></i> Protected by 256-bit encryption & FDIC insurance
+                        </div>
+                        <button class="btn btn-primary btn-large" onclick="processTransfer()">
+                            <i class="fas fa-paper-plane"></i> Transfer Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header"><h2>Confirm Transfer</h2><button class="modal-close" onclick="closeModal()" aria-label="Close"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn-text" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmTransfer()">Confirm & Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+            toast.innerHTML = `<div class="toast-icon"><i class="fas fa-${icon}"></i></div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-msg">${message}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'slideOut 0.3s ease forwards'; setTimeout(() => toast.remove(), 300); }, 4000);
+        }
+
+        function setTransferType(el, type) {
+            document.querySelectorAll('.transfer-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            if (type === 'zelle') {
+                document.getElementById('transferForm').innerHTML = `
+                    <div class="form-section"><h3>Zelle Payment</h3><div class="form-grid">
+                        <div class="form-group full"><label>From Account</label><select><option>Premium Checking •••• 8842 ($24,850.00)</option></select></div>
+                        <div class="form-group full"><label>Send To</label><input type="text" placeholder="Email or phone number" value="sarah.mitchell@email.com"></div>
+                        <div class="form-group full"><label>Amount</label><div class="amount-input"><span>$</span><input type="number" value="250.00" inputmode="decimal"></div></div>
+                        <div class="form-group full"><label>Memo</label><input type="text" placeholder="Dinner last night 🍕"></div>
+                    </div></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                        <div style="font-size:13px;color:var(--text-secondary);"><i class="fas fa-shield-alt"></i> Zelle payments are instant and cannot be canceled</div>
+                        <button class="btn btn-primary btn-large" onclick="showToast('Zelle Sent', '$250.00 sent to Sarah Mitchell instantly.', 'success')"><i class="fas fa-bolt"></i> Send with Zelle</button>
+                    </div>`;
+            } else if (type === 'wire') {
+                document.getElementById('transferForm').innerHTML = `
+                    <div class="form-section"><h3>Wire Transfer Details</h3><div class="form-grid">
+                        <div class="form-group full"><label>From Account</label><select><option>Premium Checking •••• 8842 ($24,850.00)</option></select></div>
+                        <div class="form-group full"><label>Beneficiary Name</label><input type="text" placeholder="Full legal name"></div>
+                        <div class="form-group full"><label>Bank Name</label><input type="text" placeholder="Receiving bank"></div>
+                        <div class="form-group"><label>Account Number</label><input type="text" placeholder="••••••••••"></div>
+                        <div class="form-group"><label>ABA/Routing Number</label><input type="text" placeholder="9 digits"></div>
+                        <div class="form-group full"><label>Amount</label><div class="amount-input"><span>$</span><input type="number" placeholder="0.00" inputmode="decimal"></div></div>
+                        <div class="form-group full"><label>Purpose / Reference</label><input type="text" placeholder="Invoice #12345"></div>
+                    </div></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                        <div style="font-size:13px;color:var(--text-secondary);"><i class="fas fa-info-circle"></i> Domestic wires: $15 fee • International: $35 fee</div>
+                        <button class="btn btn-primary btn-large" onclick="showToast('Wire Initiated', 'Wire transfer submitted for processing. Reference: #WIRE-884299', 'success')"><i class="fas fa-globe"></i> Send Wire</button>
+                    </div>`;
+            } else {
+                location.reload();
+            }
+        }
+
+        function processTransfer() {
+            const amount = document.getElementById('txAmount').value;
+            const from = document.getElementById('fromAccount').selectedOptions[0].text;
+            const to = document.getElementById('toAccount').selectedOptions[0].text;
+            if (!amount || amount <= 0) { showToast('Error', 'Please enter a valid amount.', 'error'); return; }
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align:center;padding:16px;">
+                    <div style="width:64px;height:64px;background:var(--accent-light);color:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;"><i class="fas fa-exchange-alt"></i></div>
+                    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px;">$${parseFloat(amount).toFixed(2)}</h3>
+                    <p style="color:var(--text-secondary);margin-bottom:24px;">From ${from.split('•')[0]} to ${to.split('•')[0]}</p>
+                    <div style="background:var(--app-bg);border-radius:8px;padding:16px;text-align:left;font-size:14px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>Amount</span><strong>$${parseFloat(amount).toFixed(2)}</strong></div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>Fee</span><strong style="color:var(--success);">FREE</strong></div>
+                        <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border-color);"><span>Total</span><strong>$${parseFloat(amount).toFixed(2)}</strong></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function confirmTransfer() {
+            closeModal();
+            const amount = document.getElementById('txAmount').value;
+            showToast('Transfer Complete', `$${parseFloat(amount).toFixed(2)} transferred successfully.`, 'success');
+            document.getElementById('txAmount').value = '';
+        }
+
+        function closeModal() { 
+            document.getElementById('modalOverlay').classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+        
+        // Close sidebar on nav click (mobile)
+        document.querySelectorAll('.sidebar-nav a, .sidebar-nav button').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) toggleSidebar();
+            });
+        });
+    </script>
+</body>
+</html>'''
+
+with open(os.path.join(output_dir, "transfers.html"), "w", encoding="utf-8") as f:
+    f.write(transfers_html)
+
+print(f"Updated transfers.html: {len(transfers_html):,} chars")
+Updated transfers.html: 15,030 chars
